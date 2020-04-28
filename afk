@@ -1,0 +1,43 @@
+#!/bin/sh
+
+if [[ -z "${AFK_BOT_TOKEN}" ]]; then
+  echo "Must provide AFK_BOT_TOKEN in environment" 1>&2
+  exit 1
+fi
+
+if [[ -z "${RECIPIENT_ID}" ]]; then
+  echo "Must provide RECIPIENT_ID in environment" 1>&2
+  exit 1
+fi
+
+HOSTNAME=$(hostname)
+CURRENT_PATH=$(pwd)
+send_message() {
+  curl --request POST \
+    --url https://api.telegram.org/bot$AFK_BOT_TOKEN/sendMessage \
+    --header 'content-type: application/json' \
+    --data "{
+    \"chat_id\":\"$RECIPIENT_ID\",
+    \"text\":\"<b>Hostname:</b> <pre>$HOSTNAME</pre>\n<b>Command outcome:</b> <em>$1</em>\n<b>Command:</b> <pre>$2</pre>\n<b>Path:</b> <pre>$CURRENT_PATH</pre>\",
+    \"parse_mode\":\"HTML\"
+  }"
+}
+
+echo "Starting AFK..."
+echo "Command: $*"
+COMMAND="$*"
+
+set -x
+"$@"
+set +x
+
+RESULT=$?
+if [ $RESULT -eq 0 ]; then
+  echo "Outcome: Success"
+  send_message "✅ Pass" "$COMMAND"
+else
+  echo "Outcome: Failed"
+  send_message "❌ Failed" "$COMMAND"
+fi
+
+echo "Done with AFK."
