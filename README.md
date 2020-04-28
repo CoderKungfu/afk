@@ -10,7 +10,7 @@ Use this utility to notify you on Telegram when your long running command finish
     cp afk /usr/local/bin/
     ```
 
-2. Get a Telegram bot and set the following environment variables:
+2. Get a [Telegram bot](https://core.telegram.org/bots) and set the following environment variables:
 
     ```bash
     AFK_BOT_TOKEN=<the Telegram bot token from the @botfather>
