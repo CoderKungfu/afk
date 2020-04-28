@@ -28,13 +28,13 @@ Use this utility to notify you on Telegram when your long running command finish
     afk npm test
     ```
     
-    ![Using afk](./part1.gif)
+    ![Using afk](./images/part1.gif)
 
 4. Telegram messages should show up:
     
-    ![MacOS Notification](./macos_notification.png)
+    ![MacOS Notification](./images/macos_notification.png)
     
-    ![Telegram Message](./telegram_message.png)
+    ![Telegram Message](./images/telegram_message.png)
 
 ## Dependency
 
