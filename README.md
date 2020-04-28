@@ -25,8 +25,16 @@ Use this utility to notify you on Telegram when your long running command finish
     Example:
 
     ```bash
-    afk which docker
+    afk npm test
     ```
+    
+    ![Using afk](./part1.gif)
+
+4. Telegram messages should show up:
+    
+    ![MacOS Notification](./macos_notification.png)
+    
+    ![Telegram Message](./telegram_message.png)
 
 ## Dependency
 
