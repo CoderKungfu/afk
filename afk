@@ -43,6 +43,13 @@ dotenv
 can_start
 
 echo "[AFK] Starting AFK..."
+if [ $# -eq 0 ]
+  then
+    echo "[AFK] Please input command.
+    Example usage:
+    afk [command]"
+    exit 1
+fi
 COMMAND="$*"
 echo "[AFK] Command: $COMMAND"
 echo "[AFK] ======================="
