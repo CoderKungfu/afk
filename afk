@@ -1,43 +1,65 @@
 #!/bin/sh
 
-if [[ -z "${AFK_BOT_TOKEN}" ]]; then
-  echo "Must provide AFK_BOT_TOKEN in environment" 1>&2
-  exit 1
-fi
+dotenv () {
+  set -a
+  if [ -f .afkconfig ]; then
+    echo "[AFK] Reading .afkconfig from current folder..."
+    . .afkconfig
+  elif [ -f $HOME/.afkconfig ]; then
+    echo "[AFK] Reading .afkconfig from $HOME..."
+    . $HOME/.afkconfig
+  fi
+  set +a
+}
 
-if [[ -z "${RECIPIENT_ID}" ]]; then
-  echo "Must provide RECIPIENT_ID in environment" 1>&2
-  exit 1
-fi
+can_start () {
+  if [[ -z "${AFK_BOT_TOKEN}" ]]; then
+    echo "[AFK] ERROR: Must provide AFK_BOT_TOKEN in environment" 1>&2
+    exit 1
+  fi
 
-HOSTNAME=$(hostname)
-CURRENT_PATH=$(pwd)
+  if [[ -z "${RECIPIENT_ID}" ]]; then
+    echo "[AFK] ERROR: Must provide RECIPIENT_ID in environment" 1>&2
+    exit 1
+  fi
+}
+
 send_message() {
-  curl --request POST \
+  HOSTNAME=$(hostname)
+  CURRENT_PATH=$(pwd)
+
+  echo "[AFK] Posting notification to Telegram Bot..."
+  curl -s --request POST \
     --url https://api.telegram.org/bot$AFK_BOT_TOKEN/sendMessage \
     --header 'content-type: application/json' \
     --data "{
     \"chat_id\":\"$RECIPIENT_ID\",
     \"text\":\"<b>Hostname:</b> <pre>$HOSTNAME</pre>\n<b>Command outcome:</b> <em>$1</em>\n<b>Command:</b> <pre>$2</pre>\n<b>Path:</b> <pre>$CURRENT_PATH</pre>\",
     \"parse_mode\":\"HTML\"
-  }"
+  }" > /dev/null
 }
 
-echo "Starting AFK..."
-echo "Command: $*"
+dotenv
+can_start
+
+echo "[AFK] Starting AFK..."
 COMMAND="$*"
+echo "[AFK] Command: $COMMAND"
+echo "[AFK] ======================="
 
 set -x
 "$@"
 set +x
 
 RESULT=$?
+
+echo "[AFK] ======================="
 if [ $RESULT -eq 0 ]; then
-  echo "Outcome: Success"
+  echo "[AFK] Outcome: ✅ Success"
   send_message "✅ Pass" "$COMMAND"
 else
-  echo "Outcome: Failed"
+  echo "[AFK] Outcome: ❌ Failed"
   send_message "❌ Failed" "$COMMAND"
 fi
 
-echo "Done with AFK."
+echo "[AFK] Done with AFK."
