@@ -33,7 +33,7 @@ Use this utility to notify you on Telegram when your long running command finish
     afk npm test
     ```
     
-    ![Using afk](./images/part1.gif)
+    ![Using afk](./images/demo.gif)
 
 5. Telegram messages should show up:
     
