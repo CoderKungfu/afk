@@ -12,7 +12,7 @@ Use this utility to notify you on Telegram when your long running command finish
 
 2. Get a [Telegram bot](https://core.telegram.org/bots). You will need to get the `bot_token` and a recipient `chat_id`.
 
-3. Add a `.akfconfig` file to your home directory with this content:
+3. Add a `.afkconfig` file to your home directory with this content:
 
     ```bash
     AFK_BOT_TOKEN=<the Telegram bot token from the @botfather>
