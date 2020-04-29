@@ -49,9 +49,8 @@ echo "[AFK] ======================="
 
 set -x
 "$@"
-set +x
-
 RESULT=$?
+set +x
 
 echo "[AFK] ======================="
 if [ $RESULT -eq 0 ]; then
